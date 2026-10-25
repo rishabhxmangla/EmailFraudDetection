@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MailGuard AI - Email Fraud Detection</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>🛡️ MailGuard AI</h1>
+        <p>AI-Powered Online Email Fraud Detection</p>
+    </header>
+
+    <main>
+        <section class="scanner">
+            <h2>Scan Your Email</h2>
+            <p>Paste a sample email to check for suspicious signs.</p>
+
+            <form method="POST" action="/">
+                <label for="sender">Sender Email</label>
+                <input type="text" id="sender" name="sender"
+                       placeholder="sender@example.com">
+
+                <label for="subject">Email Subject</label>
+                <input type="text" id="subject" name="subject"
+                       placeholder="Enter email subject">
+
+                <label for="body">Email Message</label>
+                <textarea id="body" name="body" rows="7"
+                          placeholder="Paste the email content here"></textarea>
+
+                <button type="submit">🔍 Scan Email for Fraud</button>
+            </form>
+        </section>
+
+        {% if result %}
+        <section class="result">
+            {% if result.error %}
+                <h2>⚠️ Input Required</h2>
+                <p>{{ result.error }}</p>
+            {% else %}
+                <h2>Scan Report</h2>
+                <h3 class="{{ result.level }}">{{ result.verdict }}</h3>
+                <p>Demo fraud score: <strong>{{ result.score }}/100</strong></p>
+
+                <h3>Warning Signs</h3>
+                {% if result.warnings %}
+                    <ul>
+                    {% for warning in result.warnings %}
+                        <li>{{ warning }}</li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No listed warning phrases were found.</p>
+                {% endif %}
+
+                <h3>Recommended Action</h3>
+                <p>{{ result.advice }}</p>
+            {% endif %}
+        </section>
+        {% endif %}
+
+        <p class="disclaimer">
+            Student project demo. Results are not a guarantee that an email
+            is safe or fraudulent. Never share passwords or OTPs.
+        </p>
+    </main>
+</body>
+</html>
